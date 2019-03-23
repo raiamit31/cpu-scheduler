@@ -10,7 +10,7 @@ struct process{
 void get_process( int );
 void print_process( int );
 void add_process( struct process * );
-void schedule( void );
+void schedule( int );
 struct process* find_process( int, int, struct process * );
 void add_queue( struct process *, struct process * );
 void remove_node( struct process *, struct process * );
@@ -24,7 +24,7 @@ int main( void )
 
 	get_process( n_process );
 	print_process( n_process );
-	schedule( );
+	schedule( n_process );
 	print_process( n_process );
 	return 0;
 }
@@ -81,6 +81,8 @@ void add_process( struct process *p )
 
 void print_process( int n ) // change the declaration to print_process( void );
 {
+	if( !n )
+		return;
 	struct process *temp = head;
 	while( temp->next != NULL )
 	{
@@ -90,8 +92,11 @@ void print_process( int n ) // change the declaration to print_process( void );
 	printf("P%d\n", temp->pid);
 } // print_process
 
-void schedule( void )
+void schedule( int n_process )
 {
+
+	if( !n_process )
+		return;
 	int start = head->a_time, end = head->a_time + head->cpu_burst;
 	struct process *queue = head, *temp = NULL;
 
