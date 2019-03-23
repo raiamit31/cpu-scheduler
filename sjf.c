@@ -23,6 +23,7 @@ int main( void )
 	scanf("%d", &n_process);
 
 	get_process( n_process );
+	print_process( n_process );
 	schedule( );
 	print_process( n_process );
 	return 0;
@@ -96,6 +97,7 @@ void schedule( void )
 
 	head = head->next;
 
+	queue->next = NULL;
 	printf("%d\n", queue->cpu_burst);
 	while( head != NULL )
 	{
@@ -113,7 +115,6 @@ void schedule( void )
 
 struct process* find_process( int s, int e, struct process *h )
 {
-	printf("Entered find process\n");
 	int smallest = h->cpu_burst;
         struct process *temp = h;
 	h = h->next;
@@ -130,22 +131,18 @@ struct process* find_process( int s, int e, struct process *h )
 
 		h = h->next;
 	} // while
-	printf("Returning from find process\n");
 	return temp;
 }// find_process
 
 void add_queue( struct process *h, struct process *p )
 {
-	printf("Entered add queue\n");
 	for( ; h->next != NULL ; h = h->next );
 	h->next = p;
-	printf("Returning from add queue\n");
 } // add_queue
 
 
 void remove_node( struct process *h, struct process *p )
 {
-	printf("Entered remove node\n");
 	if( h == p )
 	{
 		if( h->next == NULL )
@@ -153,10 +150,9 @@ void remove_node( struct process *h, struct process *p )
 		else
 			head = head->next;
 	}
-
+	else{
 	for( ; h->next != p ; h = h->next );
-
 	h->next = p->next;
+	}
 	p->next = NULL;
-	printf("Returning remove node\n");
 } // remove_node
