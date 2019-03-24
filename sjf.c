@@ -59,7 +59,7 @@ void add_process( struct process *p )
 				break;
 			else if ( p->a_time == temp->a_time )
 			{
-				if( p->cpu_burst <= temp->cpu_burst )
+				if( p->cpu_burst < temp->cpu_burst )
 					break;
 				
 			}
