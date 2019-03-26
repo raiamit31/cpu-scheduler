@@ -1,98 +1,24 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+#include "common_type.h"
 
-struct process{
-	int a_time, cpu_burst, pid;
-	struct process *next;
-} *head = NULL;
-
-void get_process( int );
-void print_process( int );
-void add_process( struct process * );
-void schedule( int );
+#include "common_function.h"
 struct process* find_process( int, int, struct process * );
-void add_queue( struct process *, struct process * );
-void remove_node( struct process *, struct process * );
+void schedule_sjf( int );
 
-
-int main( void )
+void sjf_init( void )
 {
 	int n_process;
 	printf("Enter the number of process : ");
 	scanf("%d", &n_process);
 
-	get_process( n_process );
+	get_process( n_process, 2 );
 	print_process( n_process );
-	schedule( n_process );
+	schedule_sjf( n_process );
 	print_process( n_process );
-	return 0;
 }
-
-void get_process( int n )
-{
-	struct process *temp = NULL;
-	for( int i = 1; i<=n; i++)
-	{
-		temp = ( struct process * )( malloc( sizeof( struct process ) ) );
-		temp->pid = i;
-		printf("Enter the details of process \'P%d\'\n", i);
-		printf("Arrival time : ");
-	        scanf("%d",&temp->a_time );
-		printf("CPU burst : ");
-	        scanf("%d",&temp->cpu_burst );
-
-		add_process( temp );
-	} // for
-}
-
-void add_process( struct process *p )
-{
-	if( head == NULL )
-		head = p;
-	else
-	{
-		struct process *temp, *q = NULL;
-		for( temp = head; temp != NULL; temp = temp->next )
-		{
-			if( p->a_time < temp->a_time )
-				break;
-			else if ( p->a_time == temp->a_time )
-			{
-				if( p->cpu_burst < temp->cpu_burst )
-					break;
-				
-			}
-			q = temp;		
-		} // for
-		if( q == NULL )
-		{
-			p->next = head;
-			head = p;
-		} //if
-		else if( temp == NULL )
-			q->next = p;
-		else{
-			p->next = temp;
-			q->next = p;
-		}
-	} // else
-} // add_process
-
-void print_process( int n ) // change the declaration to print_process( void );
-{
-	if( !n )
-		return;
-	struct process *temp = head;
-	while( temp->next != NULL )
-	{
-		printf("P%d --> ", temp->pid);
-		temp = temp->next;
-	} //while
-	printf("P%d\n", temp->pid);
-} // print_process
-
-void schedule( int n_process )
+void schedule_sjf( int n_process )
 {
 
 	if( !n_process )
@@ -139,25 +65,5 @@ struct process* find_process( int s, int e, struct process *h )
 	return temp;
 }// find_process
 
-void add_queue( struct process *h, struct process *p )
-{
-	for( ; h->next != NULL ; h = h->next );
-	h->next = p;
-} // add_queue
 
 
-void remove_node( struct process *h, struct process *p )
-{
-	if( h == p )
-	{
-		if( h->next == NULL )
-			head = NULL;
-		else
-			head = head->next;
-	}
-	else{
-	for( ; h->next != p ; h = h->next );
-	h->next = p->next;
-	}
-	p->next = NULL;
-} // remove_node
