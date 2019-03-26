@@ -18,7 +18,7 @@ void get_process( int n, int choice )
 	        scanf("%d",&temp->cpu_burst );
 
 
-		switch( choice )
+		switch( choice )// options that are specific to different scheduling algorithms, case number is according to main.c
 		{
 			case 1:
 			case 2:
@@ -54,7 +54,7 @@ void add_process( struct process *p, int choice )
 				break;
 			else if ( p->a_time == temp->a_time )
 			{
-				switch( choice )
+				switch( choice ) // options that are specific to different scheduling algorithms, case number is according to main.c
 				{
 					case 1:
 					case 2:
@@ -116,16 +116,27 @@ void remove_node( struct process *h, struct process *p )
 	p->next = NULL;
 } // remove_node
 
-void print_process( int n ) // change the declaration to print_process( void );
+void print_process( int n, char *c ) // change the declaration to print_process( void );
 {
 	if( !n )
 		return;
+	printf("%s : ", c );
 	struct process *temp = head;
 	while( temp->next != NULL )
 	{
 		printf("P%d --> ", temp->pid);
 		temp = temp->next;
 	} //while
-	printf("P%d\n", temp->pid);
+	printf("P%d\n\n", temp->pid);
 } // print_process
 
+
+void print_table( struct process *p )
+{
+	if( p == NULL )
+		return;
+
+	printf("| PROCESS | ARRIVAL TIME | CPU BURST | PRIORITY |\n");
+	for(; p != NULL ; p = p->next )
+		printf("|   P%-3d  |     %3d      |   %3d     |   %3d    |\n", p->pid, p->a_time, p->cpu_burst, p->priority);
+}

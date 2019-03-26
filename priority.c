@@ -14,11 +14,10 @@ void priority_init( void )
 	scanf("%d", &n_process);
 
 	get_process( n_process, 3 );
-	printf("Oder of arrival : ");
-	print_process( n_process );
+	print_process( n_process, "\nOrder of arrival" );
+	print_table( head );
 	schedule_priority( n_process );
-	printf("\nOrder of termination : ");
-	print_process( n_process );
+	print_process( n_process, "\nOrder of termination" );
 }
 
 void schedule_priority( int n_process )

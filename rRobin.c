@@ -15,9 +15,10 @@ void rRobin_init( void )
 	scanf("%d", &n_process);
 
 	get_process( n_process, 4 );
-	print_process( n_process );
+	print_process( n_process, "\nOrder of arrival" );
+	print_table( head );
 	schedule_rRobin( n_process );
-	print_process( n_process );
+	print_process( n_process, "\nOrder of termination" );
 }
 
 void schedule_rRobin( int n_process )

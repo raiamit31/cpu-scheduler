@@ -14,9 +14,10 @@ void sjf_init( void )
 	scanf("%d", &n_process);
 
 	get_process( n_process, 2 );
-	print_process( n_process );
+	print_process( n_process, "\nOrder of arrival" );
+	print_table( head );
 	schedule_sjf( n_process );
-	print_process( n_process );
+	print_process( n_process, "\nOrder of termination" );
 }
 void schedule_sjf( int n_process )
 {
@@ -29,7 +30,6 @@ void schedule_sjf( int n_process )
 	head = head->next;
 
 	queue->next = NULL;
-	printf("%d\n", queue->cpu_burst);
 	while( head != NULL )
 	{
 		printf("%d\n", head->cpu_burst);
