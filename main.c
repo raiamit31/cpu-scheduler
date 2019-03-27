@@ -1,10 +1,10 @@
 #include<stdio.h>
+#include<stdlib.h>
 
 struct process{
-	int a_time, cpu_burst, r_time, priority, pid;
+	int pid, a_time, cpu_burst, r_time, priority, response_time, waiting_time, tat;
 	struct process *next;
-} *head = NULL;
-
+} *head;
 
 struct gantt_chart{
 	int process_id, start, end;
@@ -13,6 +13,8 @@ struct gantt_chart{
 
 
 #include "common_function.h"
+void release( void );
+
 
 int main( void )
 {
@@ -25,7 +27,7 @@ int main( void )
 	printf("5) Exit\n");
 
 	do{
-		printf("Enter your choice : ");
+		printf("\nEnter your choice : ");
 		scanf("%d", &choice );
 
 		switch( choice )
@@ -54,9 +56,29 @@ int main( void )
 			default:
 				printf("Wrong choice, retry!!\n\n");
 		} //switch
-		header = trailer = NULL;
-	       	head = NULL; // change this with to avoid memory leak
+		release();
 	}while ( choice );
 
 	return 0;
 }
+
+
+void release( void )
+{
+	struct process *temp = NULL;
+	struct gantt_chart *c = NULL;
+
+	while( head != NULL )
+	{
+		temp = head;
+		head = head->next;
+		free( temp );
+	}
+
+	while( header != NULL )
+	{
+		c = header;
+		header = header->next;
+		free( c );
+	}
+} //release

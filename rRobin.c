@@ -15,11 +15,28 @@ void rRobin_init( void )
 	scanf("%d", &n_process);
 
 	get_process( n_process, 4 );
+
+	printf("---------------------------------------------------------------------------------------------------------------------\n");
+	
 	print_process( n_process, "\nOrder of arrival" );
-	print_table( head );
+
 	schedule_rRobin( n_process );
-	print_process( n_process, "\nOrder of termination" );
+
+	print_process( n_process, "Order of termination" );
+
+	printf("\n=== Gantt chart ===\n");
 	print_gantt_chart();
+	printf("\n");
+
+	sort_ready_queue( head );	
+	calculate_response_time( header, head );
+	calculate_waiting_tat( header, head );
+
+	print_table( head );
+
+	printf("\n");
+	average_time( head, n_process );	
+	printf("---------------------------------------------------------------------------------------------------------------------\n");
 }
 
 void schedule_rRobin( int n_process )

@@ -1,5 +1,5 @@
 extern struct process{
-	int a_time, cpu_burst, r_time, priority, pid;
+	int pid, a_time, cpu_burst, r_time, priority, response_time, waiting_time, tat;
 	struct process *next;
 } *head;
 

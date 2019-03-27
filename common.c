@@ -63,7 +63,7 @@ void add_process( struct process *p, int choice )
 							loop_break = 1;
 						break; //case break
 					case 3:
-						if( p->priority < temp->priority )
+						if( p->priority > temp->priority )
 							loop_break = 1;
 						else if( p->priority == temp->priority )
 						{
@@ -127,7 +127,7 @@ void print_process( int n, char *c ) // change the declaration to print_process(
 		printf("P%d --> ", temp->pid);
 		temp = temp->next;
 	} //while
-	printf("P%d\n\n", temp->pid);
+	printf("P%d\n", temp->pid);
 } // print_process
 
 
@@ -136,7 +136,100 @@ void print_table( struct process *p )
 	if( p == NULL )
 		return;
 
-	printf("| PROCESS | ARRIVAL TIME | CPU BURST | PRIORITY |\n");
+	printf("| PROCESS | ARRIVAL TIME | CPU BURST | PRIORITY | RESPONSE TIME | WAITING TIME | TURN AROUND TIME |\n");
 	for(; p != NULL ; p = p->next )
-		printf("|   P%-3d  |     %3d      |   %3d     |   %3d    |\n", p->pid, p->a_time, p->cpu_burst, p->priority);
+		printf("|   P%-3d  |     %3d      |   %3d     |   %3d    |     %-3d       |      %-3d     |        %-3d       |\n", 
+				p->pid, p->a_time, p->cpu_burst, p->priority, p->response_time, p->waiting_time, p->tat);
 }
+
+void sort_ready_queue( struct process *h )
+{
+	struct process *list = h;
+	h = h->next;
+	list->next = NULL;
+
+	while( h != NULL )
+	{
+		struct process *temp = list, *prev = NULL, *hold = h;
+		h = h->next;
+		hold->next = NULL;
+
+		for( ; temp != NULL && hold->pid > temp->pid; temp = temp->next )
+			prev = temp;
+
+
+		if( prev == NULL )
+		{
+			hold->next = temp;
+			list = hold;
+		}
+		else if( temp == NULL )
+			prev->next = hold;
+		else
+		{
+			prev->next = hold;
+			hold->next = temp;
+		}
+	} //while
+
+	head = list;
+} // sort_ready_queue
+
+void calculate_response_time( struct gantt_chart *c, struct process *p )
+{
+	while( p != NULL )
+	{
+		struct gantt_chart *temp = c;
+
+		for(; temp != NULL && temp->process_id != p->pid; temp = temp->next );
+
+		p->response_time = temp->start - p->a_time;
+		p = p->next;
+	}
+} // response_time
+
+void calculate_waiting_tat( struct gantt_chart *c, struct process *p )
+{
+	while( p != NULL )
+	{
+		struct gantt_chart *temp = c;
+		int t = 0;
+
+		while( temp != NULL )
+		{
+			if( temp->process_id == p->pid )
+				t = temp->end;	
+
+			temp = temp->next;
+		} // while
+
+		p->tat = t - p->a_time;
+
+		p->waiting_time = p->tat - p->cpu_burst;
+
+		p = p->next;
+	} // while
+} // calculate_waiting_time
+
+
+void average_time( struct process *h, int n)
+{
+	int r_t = 0, ta_t = 0, w_t = 0;
+	float result = 0.0f;
+
+	for(; h != NULL; h = h->next )
+	{
+		r_t += h->response_time;
+		ta_t += h->tat;
+		w_t += h->waiting_time;
+	} // for
+
+	result = ( r_t * 1.0f ) / n;
+	printf("Average response time : %.2f\n", result );
+	
+	result = ( w_t * 1.0f ) / n;
+	printf("Average waiting time : %.2f\n", result);
+	
+	result = ( ta_t * 1.0f ) / n;
+	printf("Average turn around time : %.2f\n", result);
+} //average_time

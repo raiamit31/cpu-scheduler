@@ -14,11 +14,29 @@ void priority_init( void )
 	scanf("%d", &n_process);
 
 	get_process( n_process, 3 );
+
+
+	printf("---------------------------------------------------------------------------------------------------------------------\n");
 	print_process( n_process, "\nOrder of arrival" );
-	print_table( head );
+
 	schedule_priority( n_process );
-	print_process( n_process, "\nOrder of termination" );
+
+	print_process( n_process, "Order of termination" );
+	
+	printf("\n=== Gantt chart ===\n");
 	print_gantt_chart();
+	printf("\n");
+
+	sort_ready_queue( head );
+	
+	calculate_response_time( header, head );
+	calculate_waiting_tat( header, head );
+		
+	print_table( head );
+	printf("\n");
+	average_time( head, n_process );
+
+	printf("---------------------------------------------------------------------------------------------------------------------\n");
 }
 
 void schedule_priority( int n_process )
@@ -47,7 +65,7 @@ void schedule_priority( int n_process )
 				else
 					add_queue( queue, current_process );
 
-				add_node_gantt_chart( start_t, clock, current_process->pid );
+			//	add_node_gantt_chart( start_t, clock, current_process->pid );
 
 				remove_node( head, current_process );
 
@@ -55,8 +73,11 @@ void schedule_priority( int n_process )
 		}
 		temp = find_process_priority( clock, head );
 
-		start_t = ( temp != current_process ) ? clock : start_t;
-
+		if( temp != current_process )
+		{
+			add_node_gantt_chart( start_t, clock, current_process->pid );
+			start_t = clock;
+		}
 		current_process = temp;
 	} // while
 	head = queue;

@@ -16,4 +16,8 @@ void print_process( int, char * );
 void add_node_gantt_chart( int, int, int );
 void print_gantt_chart( void );
 
+void sort_ready_queue( struct process * );
+void calculate_response_time( struct gantt_chart *, struct process * );
+void calculate_waiting_tat( struct gantt_chart *, struct process * );
 
+void average_time( struct process *, int );
