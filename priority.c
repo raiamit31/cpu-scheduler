@@ -67,7 +67,7 @@ void add_process( struct process *p )
 				break;
 			else if ( p->a_time == temp->a_time )
 			{
-				if( p->priority < temp->priority )
+				if( p->priority > temp->priority )
 					break;
 				else if( p->priority == temp->priority )
 				{
