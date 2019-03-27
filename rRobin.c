@@ -198,7 +198,7 @@ void remove_node( struct process *h, struct process *p )
 
 void insert_after( struct process *IN, struct process *p )
 {
-	if( IN->next = NULL )
+	if( IN->next == NULL )
 	{
 		IN->next = p;
 		p->next = NULL;
