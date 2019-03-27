@@ -19,6 +19,7 @@ void rRobin_init( void )
 	print_table( head );
 	schedule_rRobin( n_process );
 	print_process( n_process, "\nOrder of termination" );
+	print_gantt_chart();
 }
 
 void schedule_rRobin( int n_process )
@@ -27,8 +28,12 @@ void schedule_rRobin( int n_process )
 	if( !n_process )
 		return;
 
-	struct process *current_process = head, *inter_node = NULL, *queue = NULL;
-	int record_time = head->a_time, clock = head->a_time, quant = 0;
+	struct process *current_process = head, 
+		       *inter_node = NULL, *queue = NULL;
+
+	int record_time = head->a_time, 
+	    clock = head->a_time, 
+	    quant = 0, start_t = head->a_time;
 
 	for( ; quant == 0 ; scanf("%d", &quant ) )
 		printf("Enter time quanta : ");
@@ -44,10 +49,13 @@ void schedule_rRobin( int n_process )
 			
 			if( current_process->r_time == 0 )
 			{
+
+				add_node_gantt_chart( start_t, clock, current_process->pid ); // add  process to gantt chart
 				if( queue == NULL )
 					queue = current_process;
 				else
 					add_queue( queue, current_process );
+
 
 				remove_node( head, current_process );
 
@@ -64,11 +72,15 @@ void schedule_rRobin( int n_process )
 				{
 					head = head->next;
 					insert_after( inter_node, current_process );
+					add_node_gantt_chart( start_t, clock, current_process->pid ); // add process to gantt chart
 					current_process = head;
+					start_t = clock;
 				}
 			}
-			else if( head != NULL && head->a_time <= clock )
+			else if( head != NULL && head->a_time <= clock ){
 				current_process = head;
+				start_t = clock;
+			}
 			else
 				current_process = NULL;
 

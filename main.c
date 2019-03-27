@@ -3,7 +3,14 @@
 struct process{
 	int a_time, cpu_burst, r_time, priority, pid;
 	struct process *next;
-} *head;
+} *head = NULL;
+
+
+struct gantt_chart{
+	int process_id, start, end;
+	struct gantt_chart *next;
+} *header = NULL, *trailer = NULL;
+
 
 #include "common_function.h"
 
@@ -47,7 +54,8 @@ int main( void )
 			default:
 				printf("Wrong choice, retry!!\n\n");
 		} //switch
-		head = NULL; // change this with to avoid memory leak
+		header = trailer = NULL;
+	       	head = NULL; // change this with to avoid memory leak
 	}while ( choice );
 
 	return 0;

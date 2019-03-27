@@ -13,3 +13,7 @@ void add_process( struct process *, int  );
 
 void print_process( int, char * );
 
+void add_node_gantt_chart( int, int, int );
+void print_gantt_chart( void );
+
+

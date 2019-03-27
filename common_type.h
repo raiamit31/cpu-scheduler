@@ -3,7 +3,7 @@ extern struct process{
 	struct process *next;
 } *head;
 
-
-
-
-
+extern struct gantt_chart{
+	int process_id, start, end;
+	struct gantt_chart *next;
+} *header, *trailer;
