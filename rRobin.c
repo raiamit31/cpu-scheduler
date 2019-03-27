@@ -93,7 +93,7 @@ void schedule_rRobin( int n_process )
 
 void insert_after( struct process *IN, struct process *p )
 {
-	if( IN->next = NULL )
+	if( IN->next == NULL )
 	{
 		IN->next = p;
 		p->next = NULL;

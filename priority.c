@@ -18,6 +18,7 @@ void priority_init( void )
 	print_table( head );
 	schedule_priority( n_process );
 	print_process( n_process, "\nOrder of termination" );
+	print_gantt_chart();
 }
 
 void schedule_priority( int n_process )
@@ -27,7 +28,11 @@ void schedule_priority( int n_process )
 		return;	
 
 	struct process *current_process = head, *queue = NULL, *temp = NULL;
-	int clock = head->a_time, pr = current_process->priority;
+
+	int clock = head->a_time, 
+	    pr = current_process->priority, 
+	    start_t = current_process->a_time;
+
 	while( head != NULL )
 	{
 		clock++;
@@ -42,11 +47,17 @@ void schedule_priority( int n_process )
 				else
 					add_queue( queue, current_process );
 
+				add_node_gantt_chart( start_t, clock, current_process->pid );
+
 				remove_node( head, current_process );
 
 			}
 		}
-		current_process = find_process_priority( clock, head );
+		temp = find_process_priority( clock, head );
+
+		start_t = ( temp != current_process ) ? clock : start_t;
+
+		current_process = temp;
 	} // while
 	head = queue;
 } // schedule
