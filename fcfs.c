@@ -1,92 +1,69 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include "common_type.h"
+#include "common_function.h"
 
 
-struct process{
-	int a_time, cpu_burst, pid;
-	struct process *next;
-} *head = NULL;
+void schedule_fcfs( void );
 
-void get_process( int );
-void print_process( );
-void add_process( struct process * );
-void print_table( struct process * );
-int main( void )
+void fcfs_init( void )
 {
 	int n_process;
 	printf("Enter the number of process : ");
 	scanf("%d", &n_process);
 
-	get_process( n_process );
-	print_process( n_process );
+	get_process( n_process, 1 );
+
+	printf("---------------------------------------------------------------------------------------------------------------------\n");
+	print_process( n_process, "\nOrder of arrival" );
+
+	schedule_fcfs();
+
+	print_process( n_process, "Order of termination" );
+
+	printf("\n=== Gantt chart ====\n");
+	print_gantt_chart();
+	printf("\n");
+	
+	sort_ready_queue( head );
+
+	calculate_response_time( header, head );
+	calculate_waiting_tat( header, head );
 	print_table( head );
-	return 0;
+	
+	printf("\n");	
+	average_time( head, n_process );
+
+	printf("---------------------------------------------------------------------------------------------------------------------\n");
 }
 
-void get_process( int n )
-{
-	struct process *temp = NULL;
-	for( int i = 1; i<=n; i++)
-	{
-		temp = ( struct process * )( malloc( sizeof( struct process ) ) );
-		temp->pid = i;
-		printf("Enter the details of process \'P%d\'\n", i);
-		printf("Arrival time : ");
-	        scanf("%d",&temp->a_time );
-		printf("CPU burst : ");
-	        scanf("%d",&temp->cpu_burst );
-
-		add_process( temp );
-	} // for
-}
-
-void add_process( struct process *p )
+void schedule_fcfs( void )
 {
 	if( head == NULL )
-		head = p;
-	else
+		return;
+
+	int start = head->a_time, end = start + head->cpu_burst;
+
+	add_node_gantt_chart( start, end, head->pid );
+	struct process *current_process = NULL, *queue = head;
+
+	head = head->next;
+	queue->next = NULL;
+
+	while( head != NULL )
 	{
-		struct process *temp, *q = NULL;
-		for( temp = head; temp != NULL; temp = temp->next )
-		{
-			if( p->a_time < temp->a_time )
-				break;
-			else if ( p->a_time == temp->a_time )
-			{
-				if( p->cpu_burst <= temp->cpu_burst )
-					break;
-				
-			}
-			q = temp;		
-		} // for
-		if( q == NULL )
-		{
-			p->next = head;
-			head = p;
-		} //if
-		else if( temp == NULL )
-			q->next = p;
+		if( head->a_time <= end )
+			add_node_gantt_chart( end, end + head->cpu_burst, head->pid );
 		else{
-			p->next = temp;
-			q->next = p;
+			add_node_gantt_chart( head->a_time, head->a_time + head->cpu_burst, head->pid );
+			end = head->a_time;
 		}
-	} // else
-} // add_process
+		end += head->cpu_burst;
 
-void print_process( void ) // change the declaration to print_process( void );
-{
-	struct process *temp = head;
-	while( temp->next != NULL )
-	{
-		printf("P%d --> ", temp->pid);
-		temp = temp->next;
-	} //while
-	printf("P%d\n", temp->pid);
-} // print_process
+		add_queue( queue, head );
+		remove_node( head, head );
+	}
 
-void print_table( struct process *p )
-{
-	printf("| PROCESS | ARRIVAL TIME | CPU BURST |\n");
-	for(; p != NULL ; p = p->next )
-		printf("|   P%3d  |     %3d      |   %3d     |\n", p->pid, p->a_time, p->cpu_burst);
+	head = queue;
+
 }

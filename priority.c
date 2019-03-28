@@ -1,118 +1,55 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+#include "common_type.h"
+#include"common_function.h"
 
-struct process{
-	int a_time, cpu_burst, r_time, priority, pid;
-	struct process *next;
-} *head = NULL;
-
-void get_process( int );
-void print_process( int );
-void add_process( struct process * );
-void schedule( int );
+void schedule_priority( int );
 struct process* find_process_priority( int, struct process * );
-void add_queue( struct process *, struct process * );
-void remove_node( struct process *, struct process * );
 
-
-int main( void )
+void priority_init( void )
 {
 	int n_process;
 	printf("Enter the number of process : ");
 	scanf("%d", &n_process);
 
-	get_process( n_process );
-	printf("Oder of arrival : ");
-	print_process( n_process );
-	schedule( n_process );
-	printf("\nOrder of termination : ");
-	print_process( n_process );
-	return 0;
-}
+	get_process( n_process, 3 );
 
-void get_process( int n )
-{
-	struct process *temp = NULL;
-	for( int i = 1; i<=n; i++)
-	{
-		temp = ( struct process * )( malloc( sizeof( struct process ) ) );
-		temp->pid = i;
-		printf("Enter the details of process \'P%d\'\n", i);
-		printf("Arrival time : ");
-	        scanf("%d",&temp->a_time );
-		printf("CPU burst : ");
-	        scanf("%d",&temp->cpu_burst );
-		printf("Priority : " );
-		scanf("%d", &temp->priority );
 
-		temp->r_time = temp->cpu_burst;
+	printf("---------------------------------------------------------------------------------------------------------------------\n");
+	print_process( n_process, "\nOrder of arrival" );
+
+	schedule_priority( n_process );
+	print_process( n_process, "Order of termination" );
+	
+	printf("\n=== Gantt chart ===\n");
+	print_gantt_chart();
+	printf("\n");
+
+	sort_ready_queue( head );
+	
+	calculate_response_time( header, head );
+	calculate_waiting_tat( header, head );
 		
-		add_process( temp );
-	} // for
+	print_table( head );
+	printf("\n");
+	average_time( head, n_process );
+
+	printf("---------------------------------------------------------------------------------------------------------------------\n");
 }
 
-// add_process is different from other scheduling algorithms
-
-void add_process( struct process *p )
-{
-	if( head == NULL )
-		head = p;
-	else
-	{
-		struct process *temp, *q = NULL;
-		for( temp = head; temp != NULL; temp = temp->next )
-		{
-			if( p->a_time < temp->a_time )
-				break;
-			else if ( p->a_time == temp->a_time )
-			{
-				if( p->priority > temp->priority )
-					break;
-				else if( p->priority == temp->priority )
-				{
-					if( p->cpu_burst < temp->cpu_burst )
-						break;
-				}
-				
-			}
-			q = temp;		
-		} // for
-		if( q == NULL )
-		{
-			p->next = head;
-			head = p;
-		} //if
-		else if( temp == NULL )
-			q->next = p;
-		else{
-			p->next = temp;
-			q->next = p;
-		}
-	} // else
-} // add_process
-
-void print_process( int n ) // change the declaration to print_process( void );
-{
-	if( !n )
-		return;
-	struct process *temp = head;
-	while( temp->next != NULL )
-	{
-		printf("P%d --> ", temp->pid);
-		temp = temp->next;
-	} //while
-	printf("P%d\n", temp->pid);
-} // print_process
-
-void schedule( int n_process )
+void schedule_priority( int n_process )
 {
 
 	if( !n_process )
 		return;	
 
 	struct process *current_process = head, *queue = NULL, *temp = NULL;
-	int clock = head->a_time, pr = current_process->priority;
+
+	int clock = head->a_time, 
+	    pr = current_process->priority, 
+	    start_t = current_process->a_time;
+
 	while( head != NULL )
 	{
 		clock++;
@@ -127,11 +64,20 @@ void schedule( int n_process )
 				else
 					add_queue( queue, current_process );
 
+			//	add_node_gantt_chart( start_t, clock, current_process->pid );
+
 				remove_node( head, current_process );
 
 			}
 		}
-		current_process = find_process_priority( clock, head );
+		temp = find_process_priority( clock, head );
+
+		if( temp != current_process )
+		{
+			add_node_gantt_chart( start_t, clock, current_process->pid );
+			start_t = clock;
+		}
+		current_process = temp;
 	} // while
 	head = queue;
 } // schedule
@@ -152,25 +98,4 @@ struct process* find_process_priority( int clock, struct process *h )
 	return temp;
 }// find_process
 
-void add_queue( struct process *h, struct process *p )
-{
-	for( ; h->next != NULL ; h = h->next );
-	h->next = p;
-} // add_queue
-
-
-void remove_node( struct process *h, struct process *p )
-{
-	if( h == p )
-	{
-		if( h->next == NULL )
-			head = NULL;
-		else
-			head = head->next;
-	}
-	else{
-	for( ; h->next != p ; h = h->next );
-	h->next = p->next;
-	}
-	p->next = NULL;
-} // remove_node
+	
