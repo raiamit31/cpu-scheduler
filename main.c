@@ -57,6 +57,10 @@ int main( void )
 				printf("Wrong choice, retry!!\n\n");
 		} //switch
 		release();
+		head = NULL;
+		header = trailer = NULL;
+
+		// correct this memory leak
 	}while ( choice );
 
 	return 0;
