@@ -56,7 +56,7 @@ int main( void )
 			default:
 				printf("Wrong choice, retry!!\n\n");
 		} //switch
-		release();
+		//release();
 		head = NULL;
 		header = trailer = NULL;
 
