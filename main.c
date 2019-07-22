@@ -60,7 +60,7 @@ int main( void )
 		head = NULL;
 		header = trailer = NULL;
 
-		// correct this memory leak
+		// correct this memory leak.
 	}while ( choice );
 
 	return 0;
