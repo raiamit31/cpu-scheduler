@@ -1,6 +1,8 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include<cstdio>
+#include<cstdlib>
+#include<iostream>
 #include"common_type.h"
+#include"extern_declaration.h"
 #include"common_function.h"
 
 
@@ -11,15 +13,17 @@ void get_process( int n, int choice )
 	{
 		temp = ( struct process * )( malloc( sizeof( struct process ) ) );
 		temp->pid = i;
-		printf("Enter the details of process \'P%d\'\n", i);
-		printf("Arrival time : ");
+		std::cout << "Enter the details of process \'P" << i << "\'" << std::endl;
+		//printf("Arrival time : ");
+		std::cout << "Arrival time : ";
 	        scanf("%d",&temp->a_time );
-		printf("CPU burst : ");
+		//printf("CPU burst : ");
+		std::cout << "CPU burst : ";
 	        scanf("%d",&temp->cpu_burst );
 
-
-		switch( choice )// options that are specific to different scheduling algorithms, case number is according to main.c
-		{
+		
+		// options that are specific to different scheduling algorithms, case number is according to main.c
+		switch( choice )		{
 			case 1:
 			case 2:
 			case 4:
@@ -27,9 +31,8 @@ void get_process( int n, int choice )
 				break;
 
 			case 3:
-				printf("Priority : " );
+				std::cout << "Priority : ";
 				scanf("%d", &temp->priority );
-
 				break;
 
 		} //switch
@@ -54,8 +57,8 @@ void add_process( struct process *p, int choice )
 				break;
 			else if ( p->a_time == temp->a_time )
 			{
-				switch( choice ) // options that are specific to different scheduling algorithms, case number is according to main.c
-				{
+				// options that are specific to different scheduling algorithms, case number is according to main.c
+				switch( choice )				{
 					case 1:
 					case 2:
 					case 4:
@@ -116,7 +119,7 @@ void remove_node( struct process *h, struct process *p )
 	p->next = NULL;
 } // remove_node
 
-void print_process( int n, char *c ) // change the declaration to print_process( void );
+void print_process( int n, const char *c )
 {
 	if( !n )
 		return;
@@ -124,10 +127,10 @@ void print_process( int n, char *c ) // change the declaration to print_process(
 	struct process *temp = head;
 	while( temp->next != NULL )
 	{
-		printf("P%d --> ", temp->pid);
+		std::cout << "P" << temp->pid << " --> ";
 		temp = temp->next;
 	} //while
-	printf("P%d\n", temp->pid);
+	std::cout << "P" << temp->pid << std::endl;
 } // print_process
 
 

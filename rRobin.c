@@ -1,7 +1,8 @@
-#include<stdio.h>
-#include<stdlib.h>
-
+#include<cstdio>
+#include<cstdlib>
+#include<iostream>
 #include "common_type.h"
+#include"extern_declaration.h"
 #include "common_function.h"
 
 void schedule_rRobin( int );
@@ -11,12 +12,13 @@ struct process * search_end( struct process *, int );
 void rRobin_init( void )
 {
 	int n_process;
-	printf("Enter the number of process : ");
+	std::cout << "Enter the number of process : ";
 	scanf("%d", &n_process);
 
 	get_process( n_process, 4 );
-
-	printf("---------------------------------------------------------------------------------------------------------------------\n");
+	printf("------------------------------------------"\
+	"--------------------------------------------------"\
+	"------------------------\n");
 	
 	print_process( n_process, "\nOrder of arrival" );
 
@@ -24,9 +26,9 @@ void rRobin_init( void )
 
 	print_process( n_process, "Order of termination" );
 
-	printf("\n=== Gantt chart ===\n");
+	std::cout << "\n=== Gantt chart ===\n";
 	print_gantt_chart();
-	printf("\n");
+	std::cout << std::endl;
 
 	sort_ready_queue( head );	
 	calculate_response_time( header, head );
@@ -34,10 +36,13 @@ void rRobin_init( void )
 
 	print_table( head );
 
-	printf("\n");
+	std::cout << std::endl;
 	average_time( head, n_process );	
-	printf("---------------------------------------------------------------------------------------------------------------------\n");
-}
+	printf("------------------------------------------"\
+	"--------------------------------------------------"\
+	"------------------------\n");
+
+} // rRobin_init
 
 void schedule_rRobin( int n_process )
 {
@@ -53,7 +58,7 @@ void schedule_rRobin( int n_process )
 	    quant = 0, start_t = head->a_time;
 
 	for( ; quant == 0 ; scanf("%d", &quant ) )
-		printf("Enter time quanta : ");
+		std::cout << "Enter time quanta : ";
 
 	while( head != NULL )
 	{
@@ -77,8 +82,8 @@ void schedule_rRobin( int n_process )
 				remove_node( head, current_process );
 
 				record_time = clock;
-			}
-		} // if
+			} // inner if
+		} // outer if
 
 		if( !((clock - record_time ) % quant ) ){
 
@@ -92,20 +97,20 @@ void schedule_rRobin( int n_process )
 					add_node_gantt_chart( start_t, clock, current_process->pid ); // add process to gantt chart
 					current_process = head;
 					start_t = clock;
-				}
-			}
+				} // inner if
+			} // outer if 
 			else if( head != NULL && head->a_time <= clock ){
 				current_process = head;
 				start_t = clock;
-			}
+			} // else if 
 			else
 				current_process = NULL;
 
 			record_time = clock;
-		}
+		} //if 
 	} // while
 	head = queue;
-} // schedule
+} // schedule_rRobin
 
 
 void insert_after( struct process *IN, struct process *p )
@@ -114,14 +119,14 @@ void insert_after( struct process *IN, struct process *p )
 	{
 		IN->next = p;
 		p->next = NULL;
-	}
+	} //if 
 	else{
 		p->next = IN->next;
 		IN->next = p;
-	}
+	} // else
 } // insert_after
 
-struct process *  search_end( struct process *h, int clock )
+struct process* search_end( struct process *h, int clock )
 {
 	struct process *q = NULL;
 
@@ -129,4 +134,4 @@ struct process *  search_end( struct process *h, int clock )
 		q = h;
 
 	return q;
-}
+}// search_end

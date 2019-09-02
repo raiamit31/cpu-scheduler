@@ -1,10 +1,8 @@
-#include<stdio.h>
-#include<stdlib.h>
-
-extern struct gantt_chart{
-	int process_id, start, end;
-	struct gantt_chart *next;
-} *header, *trailer;
+#include<cstdio>
+#include<cstdlib>
+#include<iostream>
+#include "common_type.h"
+#include "extern_declaration.h"
 
 void add_node_gantt_chart( int, int, int );
 void print_gantt_chart( );
@@ -45,6 +43,6 @@ void print_gantt_chart( void  )
 		temp = h->end;
 	} // for
 
-	printf("\n");
+	std::cout << std::endl;
 
 }// print_gantt_chart

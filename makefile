@@ -7,7 +7,7 @@ OBJ = main.c\
       chart.c
 
 start:	$(OBJ) common_function.h common_type.h
-	gcc $(OBJ) -o final -g
+	g++ $(OBJ) -o test -g
 
 
 

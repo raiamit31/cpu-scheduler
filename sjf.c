@@ -1,21 +1,24 @@
-#include<stdio.h>
-#include<stdlib.h>
-
+#include<cstdio>
+#include<cstdlib>
+#include<iostream>
 #include "common_type.h"
-
+#include"extern_declaration.h"
 #include "common_function.h"
+
 struct process* find_process( int, int, struct process * );
 void schedule_sjf( int );
 
 void sjf_init( void )
 {
 	int n_process;
-	printf("Enter the number of process : ");
+	std::cout << "Enter the number of process : ";
 	scanf("%d", &n_process);
 
 	get_process( n_process, 2 );
+	printf("------------------------------------------"\
+	"--------------------------------------------------"\
+	"------------------------\n");
 
-	printf("---------------------------------------------------------------------------------------------------------------------\n");
 	print_process( n_process, "\nOrder of arrival" );
 
 	schedule_sjf( n_process );
@@ -24,17 +27,19 @@ void sjf_init( void )
 
 	printf("\n=== Gantt chart ===\n");
 	print_gantt_chart();
-	printf("\n");
+	std::cout << std::endl;
 
 	sort_ready_queue( head );	
 	calculate_response_time( header, head );
 	calculate_waiting_tat( header, head );
 	
 	print_table( head );
-	printf("\n");
+	std::cout << std::endl;
 	average_time( head, n_process );	
-	printf("---------------------------------------------------------------------------------------------------------------------\n");
-}
+	printf("------------------------------------------"\
+	"--------------------------------------------------"\
+	"------------------------\n");
+}// sjf_init
 
 void schedule_sjf( int n_process )
 {
@@ -53,7 +58,8 @@ void schedule_sjf( int n_process )
 
 	while( head != NULL )
 	{
-		printf("%d\n", head->cpu_burst);
+		std::cout << head->cpu_burst << std::endl; 
+
 		temp = find_process( start, end, head );
 		
 		if( temp->a_time <= end )
@@ -63,16 +69,18 @@ void schedule_sjf( int n_process )
 		{
 			add_node_gantt_chart( temp->a_time, temp->a_time + temp->cpu_burst, temp->pid);
 			end = temp->a_time;
-		}
+		} // else
 		
 		end += temp->cpu_burst;
-		add_queue( queue, temp ); // adding temp first because if removed first then until it is added to the queue
-					 // there will be no reference to it, so it might get lost.
+		add_queue( queue, temp ); 
+		/* adding temp first because if removed first then until it is added to the queue
+		   there will be no reference to it, so it might get lost. */
+
 		remove_node( head, temp );
-	}
+	} // while
 
 	head = queue;
-} // schedule
+} // schedule_sjf
 
 
 struct process* find_process( int s, int e, struct process *h )
@@ -88,13 +96,10 @@ struct process* find_process( int s, int e, struct process *h )
 			{
 				smallest = h->cpu_burst;
 			        temp = h;	
-			}  // if 
-		} // if 
+			}  // inner if 
+		} // outer if 
 
 		h = h->next;
 	} // while
 	return temp;
 }// find_process
-
-
-

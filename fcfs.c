@@ -1,6 +1,8 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include<cstdio>
+#include<cstdlib>
+#include<iostream>
 #include "common_type.h"
+#include"extern_declaration.h"
 #include "common_function.h"
 
 
@@ -9,12 +11,15 @@ void schedule_fcfs( void );
 void fcfs_init( void )
 {
 	int n_process;
-	printf("Enter the number of process : ");
+	std::cout << "Enter the number of process : ";
 	scanf("%d", &n_process);
 
 	get_process( n_process, 1 );
 
-	printf("---------------------------------------------------------------------------------------------------------------------\n");
+	printf("------------------------------------------"\
+	"--------------------------------------------------"\
+	"------------------------\n");
+	
 	print_process( n_process, "\nOrder of arrival" );
 
 	schedule_fcfs();
@@ -23,7 +28,7 @@ void fcfs_init( void )
 
 	printf("\n=== Gantt chart ====\n");
 	print_gantt_chart();
-	printf("\n");
+	std::cout << std::endl;
 	
 	sort_ready_queue( head );
 
@@ -31,11 +36,13 @@ void fcfs_init( void )
 	calculate_waiting_tat( header, head );
 	print_table( head );
 	
-	printf("\n");	
+	std::cout << std::endl;
 	average_time( head, n_process );
 
-	printf("---------------------------------------------------------------------------------------------------------------------\n");
-}
+	printf("-----------------------------------------"\
+	"--------------------------------------------------"\
+	"------------------------\n");
+} //fcfs_init
 
 void schedule_fcfs( void )
 {
@@ -66,4 +73,4 @@ void schedule_fcfs( void )
 
 	head = queue;
 
-}
+} //schedule_fcfs
