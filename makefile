@@ -6,7 +6,7 @@ OBJ = main.c\
       common.c\
       chart.c
 
-start:	$(OBJ) common_function.h common_type.h
+start:	$(OBJ) common_function.h common_type.h extern_declaration.h
 	g++ $(OBJ) -o test -g
 
 

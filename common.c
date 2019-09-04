@@ -23,7 +23,8 @@ void get_process( int n, int choice )
 
 		
 		// options that are specific to different scheduling algorithms, case number is according to main.c
-		switch( choice )		{
+		switch( choice )
+		{
 			case 1:
 			case 2:
 			case 4:

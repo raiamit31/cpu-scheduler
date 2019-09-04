@@ -77,4 +77,5 @@ void release( void )
 		header = header->next;
 		free( c );
 	}
+	trailer = NULL;
 } //release
