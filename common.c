@@ -59,7 +59,8 @@ void add_process( struct process *p, int choice )
 			else if ( p->a_time == temp->a_time )
 			{
 				// options that are specific to different scheduling algorithms, case number is according to main.c
-				switch( choice )				{
+				switch( choice )
+				{
 					case 1:
 					case 2:
 					case 4:
