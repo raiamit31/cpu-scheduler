@@ -85,4 +85,4 @@ void release( void )
 		header = header->next;
 		free( c );
 	}
-} //release
+} //release method unused
