@@ -51,8 +51,6 @@ int main( void )
 			case 5:
 				choice = 0;
 				break;
-			case 0:
-				choice = -1;
 			default:
 				printf("Wrong choice, retry!!\n\n");
 		} //switch
